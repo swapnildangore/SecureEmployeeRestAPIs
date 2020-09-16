@@ -13,6 +13,10 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.swapnil.learning.interceptor.LoggingInterceptor;
 
 /**
  * @author Swapnil Dangore
@@ -24,6 +28,20 @@ public class AppConfig {
 	@Bean
 	public ModelMapper modelMapper() {
 	    return new ModelMapper();
+	}
+	
+	@Bean
+	public LoggingInterceptor loggingInterceptor() {
+	    return new LoggingInterceptor();
+	}    
+	@Bean
+	public WebMvcConfigurer adapter() {
+	    return new WebMvcConfigurer() {
+	        @Override
+	        public void addInterceptors(InterceptorRegistry registry) {
+	            registry.addInterceptor(loggingInterceptor());
+	        }
+	    };
 	}
 	
 	@Bean
